@@ -1,0 +1,134 @@
+openapi: 3.0.0
+info:
+  title: User API
+  version: 1.0.0
+description: API for managing user data.
+
+paths:
+  /v1/users:
+    post:
+      summary: Create a new user
+      tags:
+        - Users
+      requestBody:
+        description: User data to create a new user.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+      responses:
+        '201':
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+
+    get:
+      summary: Retrieve all users
+      tags:
+        - Users
+      responses:
+        '200':
+          description: List of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+
+  /v1/users/{userId}:
+    get:
+      summary: Retrieve a user by ID
+      tags:
+        - Users
+      parameters:
+        - name: userId
+          in: path
+          description: User ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: User details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: User not found
+
+components:
+  schemas:
+    UserRequest:
+      type: object
+      properties:
+        firstName:
+          type: string
+        surname:
+          type: string
+        email:
+          type: string
+        telephoneNumber:
+          type: string
+        gender:
+          type: string
+        dateOfBirth:
+          type: string
+        comments:
+          type: string
+      example:
+        firstName: Pasquale
+        surname: Palena
+        email: pasquale.palena@thebest.com
+        telephoneNumber: 1234567890
+        gender: Male
+        dateOfBirth: 1990-01-01
+        comments: This is a test user.
+
+    UserResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+            - success
+        message:
+          type: string
+        user:
+          $ref: '#/components/schemas/User'
+      example:
+        status: success
+        message: User created successfully
+        user:
+          id: 1
+          firstName: Pasquale
+          surname: Palena
+          email: PasqualePalena@example.com
+          telephoneNumber: 1234567890
+          gender: Male
+          dateOfBirth: 1990-01-01
+          comments: This is a test user.
+
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        firstName:
+          type: string
+        surname:
+          type: string
+        email:
+          type: string
+        telephoneNumber:
+          type: string
+        gender:
+          type: string
+        dateOfBirth:
+          type: string
+        comments:
+          type: string
